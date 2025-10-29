@@ -1,5 +1,6 @@
 # Idées d'arborescence
 
+```
 Aestralia/
 │
 ├── AestraliaBackend.sln               → Solution .NET
@@ -41,3 +42,4 @@ Aestralia/
 ├── .gitignore
 ├── LICENSE
 └── README.md
+```
