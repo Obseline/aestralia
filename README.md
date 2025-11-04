@@ -1,4 +1,9 @@
-# Idées d'arborescence
+# Aestralia
+
+## Ressources
+- https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/coding-style.md
+
+## Idées d'arborescence
 
 ```
 Aestralia/
