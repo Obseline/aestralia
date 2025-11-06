@@ -10,8 +10,17 @@ namespace AestraliaBackend.Models
         /// </summary>
         public string Name;
         /// <summary>
-        /// TODO
+        /// Models the "cells" of the map.
         /// </summary>
+        /// This 1 dimensional list will look like this:
+        /// <code>
+        /// [
+        /// {x = 0, y = 0 }, {x = 1, y = 0 }, {x = 2, y = 0 }, {x = 3, y = 0 }
+        /// {x = 0, y = 1 }, {x = 1, y = 1 }, {x = 2, y = 1 }, {x = 3, y = 1 }
+        /// {x = 0, y = 2 }, {x = 1, y = 2 }, {x = 2, y = 2 }, {x = 3, y = 2 }
+        /// {x = 0, y = 3 }, {x = 1, y = 3 }, {x = 2, y = 3 }, {x = 3, y = 3 }
+        /// ]
+        /// </code>
         public Chunk[] Chunks;
 
         /// <summary>
