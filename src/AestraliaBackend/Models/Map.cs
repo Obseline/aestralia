@@ -10,13 +10,13 @@ namespace AestraliaBackend.Models
         public Chunk[] Chunks;
 
         // TODO: Documentation
-        public Map(string name, Int32 width, Int32 height)
+        public Map(string name, int width, int height)
         {
             Name = name;
             Chunks = Enumerable.Range(0, height)
                     .Select(h => Enumerable.Range(0, width).Select(w => (w, h)))
                     .SelectMany(inner => inner)
-                    .Select(t => new Coords { x = t.Item1, y = t.Item2 })
+                    .Select(t => new Coords { x = t.w, y = t.h })
                     // Weird hack below, cant figure it out :shrug:
                     .Select(coords => new Chunk(coords) { Coords = coords })
                     .ToArray();

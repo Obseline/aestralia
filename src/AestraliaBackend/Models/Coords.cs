@@ -4,8 +4,8 @@ namespace AestraliaBackend.Models
     public struct Coords
     {
         // TODO: Documentation
-        public Int32 x;
+        public int x;
         // TODO: Documentation
-        public Int32 y;
+        public int y;
     }
 }

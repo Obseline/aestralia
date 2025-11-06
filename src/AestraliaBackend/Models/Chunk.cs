@@ -1,15 +1,11 @@
 namespace AestraliaBackend.Models
 {
     // TODO: Documentation
-    public class Chunk
+    public class Chunk(Coords coords)
     {
         // TODO: Documentation
-        public required Coords Coords;
-
+        public required Coords Coords = coords;
         // TODO: Documentation
-        public Chunk(Coords coords)
-        {
-            Coords = coords;
-        }
+        public required Ressource[] Ressources;
     }
 }
