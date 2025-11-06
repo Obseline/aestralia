@@ -13,6 +13,6 @@ namespace AestraliaBackend.Models
         /// <summary>
         /// <see>Ressource</see>s available on this <c>Chunk</c>.
         /// </summary>
-        public Ressource[] Ressources = Array.Empty<Ressource>();
+        public Ressource[] Ressources = [];
     }
 }
