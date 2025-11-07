@@ -11,7 +11,7 @@ namespace AestraliaBackend.Models
         public string FirstName;
 
         /// <summary>
-        /// Maybe not necessary ?
+        /// TODO
         /// </summary>
         public string LastName;
     }
