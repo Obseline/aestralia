@@ -1,27 +1,27 @@
 namespace AestraliaBackend.Models
 {
     /// <summary>
-    /// Struct <c>Village</c> models 
+    /// Class <c>Village</c> models village on our <see>Map</see>.
     /// </summary>
-    public struct Village(string title, Coords[] chunk_coords)
+    public class Village(string title, Coords[] chunk_coords)
     {
         /// <summary>
-        /// TODO
+        /// Unique identifier.
         /// </summary>
         public int id;
 
         /// <summary>
-        /// TODO
+        /// Title of the Village.
         /// </summary>
         public string title = title;
 
         /// <summary>
-        /// TODO
+        /// Citizen of this village, see <see>Villager</see>.
         /// </summary>
         public Villager[] villagers = [];
 
         /// <summary>
-        /// TODO
+        /// The "position" of our village on the <see>Map</see>.
         /// </summary>
         public Coords[] chunk_coords = chunk_coords;
 
