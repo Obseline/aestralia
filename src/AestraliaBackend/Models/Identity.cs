@@ -1,17 +1,17 @@
 namespace AestraliaBackend.Models
 {
     /// <summary>
-    /// Struct <c>Identity</c> models TODO
+    /// Struct <c>Identity</c> models the identity of a <see>Villager</see>.
     /// </summary>
     public struct Identity
     {
         /// <summary>
-        /// TODO
+        /// First name of the <see>Villager</see>.
         /// </summary>
         public string FirstName;
 
         /// <summary>
-        /// TODO
+        /// Last name of the <see>Villager</see>.
         /// </summary>
         public string LastName;
     }
