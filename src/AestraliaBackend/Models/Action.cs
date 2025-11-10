@@ -1,9 +1,9 @@
 namespace AestraliaBackend.Models
 {
     /// <summary>
-    /// Struct <c>Action</c> models TODO
+    /// Class <c>Action</c> models TODO
     /// </summary>
-    public struct Action(string title)
+    public class Action(string title)
     {
         /// <summary>
         /// TODO
