@@ -1,27 +1,27 @@
 namespace AestraliaBackend.Models
 {
     /// <summary>
-    /// Struct <c>Job</c> models Jobinates
+    /// Class <c>Job</c> represents the subset every Job need to implement.
     /// </summary>
-    public struct Job()
+    public abstract class Job(string title)
     {
         /// <summary>
-        /// TODO
+        /// Unique identifier.
         /// </summary>
         public int id;
 
         /// <summary>
-        /// TODO
+        /// Name of the Job.
         /// </summary>
-        public string title;
+        public string title = title;
 
         /// <summary>
-        /// TODO
+        /// All the <see>Action</see>s the Job offers.
         /// </summary>
         public Action[] actions = [];
 
         /// <summary>
-        /// TODO
+        /// "Level" of proficiency in this Job.
         /// </summary>
         public int experience;
 
