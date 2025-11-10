@@ -1,7 +1,7 @@
 namespace AestraliaBackend.Models
 {
     /// <summary>
-    /// Struct <c>Villager</c> models a character in our simulation.
+    /// Class <c>Villager</c> models a character in our simulation.
     /// </summary>
     public class Villager()
     {
