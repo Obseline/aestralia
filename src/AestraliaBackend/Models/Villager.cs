@@ -1,44 +1,44 @@
 namespace AestraliaBackend.Models
 {
     /// <summary>
-    /// Struct <c>Villager</c> models Villagerinates
+    /// Struct <c>Villager</c> models a character in our simulation.
     /// </summary>
-    public struct Villager()
+    public class Villager()
     {
         /// <summary>
-        /// TODO
+        /// Unique identifier.
         /// </summary>
         public int id;
 
         /// <summary>
-        /// TODO
+        /// <see>Identity</see> of a Villager, such as its name.
         /// </summary>
         public Identity identity;
 
         /// <summary>
-        /// TODO
+        /// Gender of a citizen, true for a male, false otherwise.
         /// </summary>
         /// NOTE: winux Should this be part of `Identity` (I think it should)
         /// TODO: winux Create an `enum` instead of a bool
         public bool gender;
 
         /// <summary>
-        /// TODO
+        /// All the <see>Job</see>s our Villager if qualified for.
         /// </summary>
         public Job[] jobs = [];
 
         /// <summary>
-        /// TODO
+        /// Children of our villager, children will be shared between 2 Villagers.
         /// </summary>
         public Villager[] childs = [];
 
         /// <summary>
-        /// TODO
+        /// <see>Need</see>s of our Villager, such as health, energy, ...
         /// </summary>
         public Need need;
 
         /// <summary>
-        /// TODO
+        /// <see>Action</see>s not tied to a <see>Job</see> our Villager can perform.
         /// </summary>
         public Action[] actions = [
                 new Action("eat"),
