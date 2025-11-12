@@ -53,14 +53,26 @@ namespace AestraliaBackend.Models
 
         }
 
+        /// <summary>
+        /// Display the the `Map` in the Console with a preset of flags.
+        /// </summary>
+        /// Flags enabled:
+        /// 'C' - Enable colors
         public void Display()
         {
             Display("C");
         }
 
+        /// <summary>
+        /// Display the the `Map` in the Console.
+        /// </summary>
+        /// Flags available:
+        /// 'C' - Enable colors
+        /// 'V' - Enable villages
         public void Display(string format)
         {
-            bool enable_color = format.Contains('C');
+            bool enable_colors = format.Contains('C');
+            bool enable_villages = format.Contains('V');
 
             foreach (Chunk chunk in Chunks)
             {
@@ -79,7 +91,7 @@ namespace AestraliaBackend.Models
                     LandKind.None => (str: "  ", color: initial_color),
                 };
 
-                if (enable_color) { Console.ForegroundColor = color; }
+                if (enable_colors) { Console.ForegroundColor = color; }
                 Console.Write(str);
                 Console.ForegroundColor = color;
             }
