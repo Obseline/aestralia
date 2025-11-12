@@ -55,22 +55,22 @@ namespace AestraliaBackend.Models
 
         public void Display()
         {
-            this.Display("C");
+            Display("C");
         }
 
         public void Display(string format)
         {
-            var enable_color = format.Contains('C');
+            bool enable_color = format.Contains('C');
 
-            foreach (var chunk in Chunks)
+            foreach (Chunk chunk in Chunks)
             {
                 if (chunk.Coord.x == 0) { Console.WriteLine(""); }
 
-                var initial_color = Console.ForegroundColor;
+                ConsoleColor initial_color = Console.ForegroundColor;
                 // NOTE: winux Using 2 characters per cell make it look
                 // closer to a 1:1 aspect ratio than using only one
                 // character.
-                var c = chunk.LandKind switch
+                (string str, ConsoleColor color) = chunk.LandKind switch
                 {
                     LandKind.Ocean => (str: "~~", color: ConsoleColor.Blue),
                     LandKind.Forest => (str: "==", color: ConsoleColor.Green),
@@ -79,9 +79,9 @@ namespace AestraliaBackend.Models
                     LandKind.None => (str: "  ", color: initial_color),
                 };
 
-                if (enable_color) { Console.ForegroundColor = c.color; }
-                Console.Write(c.str);
-                Console.ForegroundColor = c.color;
+                if (enable_color) { Console.ForegroundColor = color; }
+                Console.Write(str);
+                Console.ForegroundColor = color;
             }
         }
     }
