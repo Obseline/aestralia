@@ -79,6 +79,9 @@ namespace AestraliaBackend.Models
                 if (chunk.Coord.x == 0) { sb.AppendLine(); }
 
                 var initial_color = Console.ForegroundColor;
+                // NOTE: winux Using 2 characters per cell make it look
+                // closer to a 1:1 aspect ratio than using only one
+                // character.
                 var c = chunk.LandKind switch
                 {
                     LandKind.Ocean => (str: "~~", color: ConsoleColor.Blue),
