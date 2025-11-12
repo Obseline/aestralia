@@ -1,9 +1,12 @@
+using System.Globalization;
+using System.Text;
+
 namespace AestraliaBackend.Models
 {
     /// <summary>
     /// Class <c>Map</c> models the world.
     /// </summary>
-    public class Map
+    public class Map : IFormattable
     {
         /// <summary>
         /// Name of the map/world.
@@ -49,6 +52,58 @@ namespace AestraliaBackend.Models
             //     }
             // }
 
+        }
+
+        public override string ToString()
+        {
+            return ToString("G", CultureInfo.CurrentCulture);
+        }
+
+        public string ToString(string formatter)
+        {
+            return ToString(formatter, CultureInfo.CurrentCulture);
+        }
+
+        public string ToString(string? formatter, IFormatProvider? provider)
+        {
+            if (string.IsNullOrEmpty(formatter))
+            {
+                formatter = "G";
+            }
+
+            var sb = new StringBuilder();
+            var enable_color = formatter.Contains('C');
+
+            foreach (var chunk in Chunks)
+            {
+                if (chunk.Coord.x == 0) { sb.AppendLine(); }
+
+                var initial_color = Console.ForegroundColor;
+                var c = chunk.LandKind switch
+                {
+                    LandKind.Ocean => (str: "~~", color: ConsoleColor.Blue),
+                    LandKind.Forest => (str: "==", color: ConsoleColor.Green),
+                    LandKind.Desert => (str: "uu", color: ConsoleColor.Yellow),
+                    LandKind.Mountain => (str: "^^", color: ConsoleColor.Gray),
+                    LandKind.None => (str: "  ", color: initial_color),
+                };
+
+                // NOTE: winux Hitting a wall there:
+                // The coloring is tied to the `Console`
+                // Hence we cannot modify it here, we are supposed to only
+                // return a string
+                // The solution is probably to have our own `IFormattable`
+                // interface.
+
+                // if (enable_color) { Console.ForegroundColor = c.color; }
+                // Console.Write(c.str);
+                // Console.ForegroundColor = c.color;
+
+                sb.Append(c.str);
+
+            }
+
+            return sb.ToString();
         }
     }
 }
