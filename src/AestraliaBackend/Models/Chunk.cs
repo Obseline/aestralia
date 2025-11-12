@@ -17,7 +17,7 @@ namespace AestraliaBackend.Models
         /// <summary>
         /// Location of the <c>Chunk</c> on the <see>Map</see>.
         /// </summary>
-        public required Coord Coord = coord;
+        public Coord Coord = coord;
 
         public LandKind LandKind = LandKind.None;
 
