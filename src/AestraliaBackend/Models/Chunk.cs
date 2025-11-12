@@ -22,7 +22,7 @@ namespace AestraliaBackend.Models
         public LandKind LandKind = LandKind.None;
 
         /// <summary>
-        /// <see>Ressource</see>s available on this <c>Chunk</c>.
+        /// <see>Item</see>s available on this <c>Chunk</c>.
         /// </summary>
         public Item[] Items = [];
     }
