@@ -2,6 +2,7 @@
 
 ## Ressources
 - https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/coding-style.md
+- https://flatbuffers.dev/
 
 ## Idées d'arborescence
 
