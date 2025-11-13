@@ -11,6 +11,7 @@ namespace AestraliaBackend.Models
         /// Name of the map/world.
         /// </summary>
         public string Name;
+
         /// <summary>
         /// Models the "cells" of the map.
         /// </summary>
@@ -24,6 +25,16 @@ namespace AestraliaBackend.Models
         /// ]
         /// </code>
         public Chunk[] Chunks;
+
+        /// <summary>
+        /// All the <see>Biome</see>s on the Map.
+        /// </summary>
+        public Biome[] Biomes = [];
+
+        /// <summary>
+        /// All the <see>Village</see>s on the Map.
+        /// </summary>
+        public List<Village> Villages = [];
 
         /// <summary>
         /// Constructor, initialize a <c>Map</c> with blank <see>Chunk</see>s.
@@ -69,32 +80,48 @@ namespace AestraliaBackend.Models
         /// Flags available:
         /// 'C' - Enable colors
         /// 'V' - Enable villages
+        /// 'B' - Enable biomes
         public void Display(string format)
         {
             bool enable_colors = format.Contains('C');
             bool enable_villages = format.Contains('V');
+            bool enable_biomes = format.Contains('B');
+            ConsoleColor initial_foreground = Console.ForegroundColor;
+            ConsoleColor initial_background = Console.BackgroundColor;
 
+            // NOTE: winux Using 2 characters per cell make it look
+            // closer to a 1:1 aspect ratio than using only one
+            // character.
             foreach (Chunk chunk in Chunks)
             {
-                if (chunk.Coord.x == 0) { Console.WriteLine(""); }
+                if (chunk.Coord.x == 0 && chunk.Coord.y != 0) { Console.WriteLine(""); }
 
-                ConsoleColor initial_color = Console.ForegroundColor;
-                // NOTE: winux Using 2 characters per cell make it look
-                // closer to a 1:1 aspect ratio than using only one
-                // character.
-                (string str, ConsoleColor color) = chunk.LandKind switch
+                // Layer 1: Biomes
+                // TODO: winux Will do later, no `Biome`s yet
+
+                // Layer 2: Chunks
+                (string str, ConsoleColor foreground) = chunk.LandKind switch
                 {
-                    LandKind.Ocean => (str: "~~", color: ConsoleColor.Blue),
-                    LandKind.Forest => (str: "==", color: ConsoleColor.Green),
-                    LandKind.Desert => (str: "uu", color: ConsoleColor.Yellow),
-                    LandKind.Mountain => (str: "^^", color: ConsoleColor.Gray),
-                    LandKind.None => (str: "  ", color: initial_color),
+                    LandKind.Ocean => ("~~", ConsoleColor.Blue),
+                    LandKind.Forest => ("==", ConsoleColor.Green),
+                    LandKind.Desert => ("uu", ConsoleColor.Yellow),
+                    LandKind.Mountain => ("^^", ConsoleColor.Gray),
+                    LandKind.None => ("  ", initial_foreground),
                 };
 
-                if (enable_colors) { Console.ForegroundColor = color; }
+                // Layer 3: Villages
+                if (Villages.Any(v => v.chunk_coords.Any(c => c == chunk.Coord)))
+                {
+                    foreground = ConsoleColor.Magenta;
+                    str = "##";
+                }
+
+                if (enable_colors) { Console.ForegroundColor = foreground; }
                 Console.Write(str);
-                Console.ForegroundColor = color;
+                Console.ForegroundColor = initial_foreground;
+                Console.BackgroundColor = initial_background;
             }
+
         }
     }
 }
