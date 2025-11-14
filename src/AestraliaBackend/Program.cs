@@ -13,5 +13,24 @@ class Program
         {
             Console.WriteLine($"Chunk at ({chunk.Coord.x}, {chunk.Coord.y})");
         }
+
+        // Create a new male villager instance
+        for (var i = 0; i < 5; i++)
+        {
+            var villager = new Villager();
+            villager.gender = true;
+            villager.SetFirstName();
+            Console.WriteLine($"Male villager First Name: {villager.identity.FirstName}");
+        }
+
+        // Create a new female villager instance
+        for (var i = 0; i < 5; i++)
+        {
+            var villager = new Villager();
+            villager.gender = false;
+            villager.SetFirstName();
+            Console.WriteLine($"Female villager First Name: {villager.identity.FirstName}");
+        }
+
     }
 }
