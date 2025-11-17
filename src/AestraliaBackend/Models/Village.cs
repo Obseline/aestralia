@@ -3,7 +3,7 @@ namespace AestraliaBackend.Models
     /// <summary>
     /// Class <c>Village</c> models village on our <see>Map</see>.
     /// </summary>
-    public class Village(string title, Coords[] chunk_coords)
+    public class Village(string title, List<Coord> chunk_coords)
     {
         /// <summary>
         /// Unique identifier.
@@ -18,12 +18,12 @@ namespace AestraliaBackend.Models
         /// <summary>
         /// Citizen of this village, see <see>Villager</see>.
         /// </summary>
-        public Villager[] villagers = [];
+        public List<Villager> villagers = [];
 
         /// <summary>
         /// The "position" of our village on the <see>Map</see>.
         /// </summary>
-        public Coords[] chunk_coords = chunk_coords;
+        public List<Coord> chunk_coords = chunk_coords;
 
     }
 }

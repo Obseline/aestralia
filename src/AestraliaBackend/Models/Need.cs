@@ -14,17 +14,17 @@ namespace AestraliaBackend.Models
         /// <summary>
         /// The max value for <see>health</see>.
         /// </summary>
-        public static int HEALTH_MAX = 100;
+        public static readonly int HEALTH_MAX = 100;
 
         /// <summary>
         /// The max value for <see>saciety</see>.
         /// </summary>
-        public static int SACIETY_MAX = 100;
+        public static readonly int SACIETY_MAX = 100;
 
         /// <summary>
         /// The max value for <see>energy</see>.
         /// </summary>
-        public static int ENERGY_MAX = 100;
+        public static readonly int ENERGY_MAX = 100;
 
         /// <summary>
         /// The health of an entity, reaching 0 (or a negative value) means death.
