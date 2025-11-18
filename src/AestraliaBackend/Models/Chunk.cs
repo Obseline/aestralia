@@ -1,5 +1,8 @@
 namespace AestraliaBackend.Models
 {
+    /// <summary>
+    /// All the possible variants for a <c>Biome</c>.
+    /// </summary>
     public enum LandKind
     {
         None = 0,
