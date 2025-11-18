@@ -1,3 +1,5 @@
+using AestraliaBackend.Models.Structs;
+
 namespace AestraliaBackend.Models
 {
     public enum LandKind
