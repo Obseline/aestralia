@@ -27,6 +27,6 @@ namespace AestraliaBackend.Models
         /// <summary>
         /// <see>Item</see>s available on this <c>Chunk</c>.
         /// </summary>
-        public Item[] Items = [];
+        public List<Item> Items = [];
     }
 }
