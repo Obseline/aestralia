@@ -1,4 +1,4 @@
-namespace AestraliaBackend.Models
+namespace AestraliaBackend.Models.Structs
 {
     /// <summary>
     /// Struct <c>Coord</c> models coordinates
