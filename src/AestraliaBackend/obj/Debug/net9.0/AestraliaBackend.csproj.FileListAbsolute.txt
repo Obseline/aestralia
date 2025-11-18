@@ -1,0 +1,15 @@
+/home/ju/Projects/aestralia/src/AestraliaBackend/bin/Debug/net9.0/AestraliaBackend
+/home/ju/Projects/aestralia/src/AestraliaBackend/bin/Debug/net9.0/AestraliaBackend.deps.json
+/home/ju/Projects/aestralia/src/AestraliaBackend/bin/Debug/net9.0/AestraliaBackend.runtimeconfig.json
+/home/ju/Projects/aestralia/src/AestraliaBackend/bin/Debug/net9.0/AestraliaBackend.dll
+/home/ju/Projects/aestralia/src/AestraliaBackend/bin/Debug/net9.0/AestraliaBackend.pdb
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/AestraliaBackend.GeneratedMSBuildEditorConfig.editorconfig
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/AestraliaBackend.AssemblyInfoInputs.cache
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/AestraliaBackend.AssemblyInfo.cs
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/AestraliaBackend.csproj.CoreCompileInputs.cache
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/AestraliaBackend.sourcelink.json
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/AestraliaBackend.dll
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/refint/AestraliaBackend.dll
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/AestraliaBackend.pdb
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/AestraliaBackend.genruntimeconfig.cache
+/home/ju/Projects/aestralia/src/AestraliaBackend/obj/Debug/net9.0/ref/AestraliaBackend.dll
