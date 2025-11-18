@@ -3,6 +3,7 @@
 ## Ressources
 - https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/coding-style.md
 - https://flatbuffers.dev/
+- https://en.wikipedia.org/wiki/Netpbm
 
 ## Idées d'arborescence
 
