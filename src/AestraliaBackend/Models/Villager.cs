@@ -51,76 +51,80 @@ namespace AestraliaBackend.Models
                 new Action("reproduce"),
         ];
 
-
         /// <summary>
         /// <see>Item</see>s held by this <c>Villager</c>.
         /// </summary>
         public List<Item> Items = [];
 
+        private struct WordBeginning(char a)
+        {
+            public char a = a;
+        };
+
+        private struct WordTransition(char a, Nullable<char> next)
+        {
+            public char a = a;
+            public Nullable<char> next = next;
+        };
+
         public void SetFirstName()
         {
-            string[] names;
-            var transitions = new Dictionary<string, List<char>>();
+            const int MIN_LENGTH = 3;
             var rng = new Random();
-            int minLength = 3;
+            var starts = new List<WordBeginning>();
+            var transitions = new List<WordTransition>();
 
             // Sample names based on gender
-            names = this.gender
-                ? new[] {"John", "Paul", "Mike", "Kevin", "Steve", "David", "Robert", "James", "Daniel", "Mark", "Anthony", "Brian", "Thomas", "Jason", "Matthew", "Ryan", "Adam", "Eric", "Justin", "Andrew", "Luke", "Nathan"}
-                : new[] {"Mary", "Linda", "Susan", "Karen", "Lisa", "Patricia", "Jessica", "Jennifer", "Sarah", "Nancy", "Laura", "Emily", "Rebecca", "Michelle", "Melissa", "Angela", "Stephanie", "Kimberly", "Amanda", "Rachel", "Elizabeth"};
+            string[] names = this.gender
+                ? new[] { "John", "Paul", "Mike", "Kevin", "Steve", "David", "Robert", "James", "Daniel", "Mark", "Anthony", "Brian", "Thomas", "Jason", "Matthew", "Ryan", "Adam", "Eric", "Justin", "Andrew", "Luke", "Nathan" }
+                : new[] { "Mary", "Linda", "Susan", "Karen", "Lisa", "Patricia", "Jessica", "Jennifer", "Sarah", "Nancy", "Laura", "Emily", "Rebecca", "Michelle", "Melissa", "Angela", "Stephanie", "Kimberly", "Amanda", "Rachel", "Elizabeth" };
 
             // Build Markov chain transitions table
             foreach (var name in names)
             {
-                string padded = "^" + name.ToLower() + "$";
-
-                for (int i = 0; i < padded.Length - 2; i++)
+                var name_sanitized = name.ToLower();
+                starts.Add(new WordBeginning(name_sanitized[0]));
+                for (int i = 0; i < name_sanitized.Length - 1; ++i)
                 {
-                    string key = padded.Substring(i, 2);
-                    char next = padded[i + 2];
-
-                    if (!transitions.ContainsKey(key))
-                        transitions[key] = new List<char>();
-
-                    transitions[key].Add(next);
+                    transitions.Add(new WordTransition(a: name_sanitized[i], next: name_sanitized[i + 1]));
                 }
+                transitions.Add(new WordTransition(a: name_sanitized[^1], next: null));
             }
 
-            // Generate name using Markov chain
-            StringBuilder result = new StringBuilder();
-            var startKeys = transitions.Keys.Where(k => k.StartsWith("^")).ToList();
-            string current = startKeys[rng.Next(startKeys.Count)];
-            result.Append(current[1]);
+            // Generate name from transitions table
+            StringBuilder sb_result = new StringBuilder();
 
-            // Continue generating until we hit the end symbol '$' and meet the minimum length
+            var last_insert = starts.OrderBy(a => rng.Next()).First().a;
+            sb_result.Append(last_insert);
+
             while (true)
             {
-                string key = current.Substring(current.Length - 2, 2);
-
-                if (!transitions.ContainsKey(key))
-                    break;
-
-                char next = transitions[key][rng.Next(transitions[key].Count)];
-
-                if (next == '$')
+                try
                 {
-                    if (result.Length >= minLength)
-                        break; // finish name generation
-                    else
-                        continue; // skip to next iteration to continue name generation
-                }
+                    var next_transition = transitions
+                        .Where(x => x.a == last_insert)
+                        .OrderBy(x => rng.Next())
+                        .First();
 
-                result.Append(next);
-                current += next;
+                    if (next_transition.next is char next)
+                    {
+                        last_insert = next;
+                        sb_result.Append(last_insert);
+                        continue;
+                    }
+
+                    // NOTE: Infinite loop if result.len < 3 but no transitions available
+                    if (transitions.Where(x => x.a == last_insert).All(x => x.next is null))
+                        break;
+
+                    if (sb_result.Length >= MIN_LENGTH)
+                        break;
+                }
+                catch { break; }
             }
 
-            // Capitalize the first letter
-            if (result.Length > 0)
-                result[0] = char.ToUpper(result[0]);
-
-            // Set the generated name as the villager's first name
-            this.identity.FirstName = result.ToString();
-
+            sb_result[0] = char.ToUpper(sb_result[0]);
+            this.identity.FirstName = sb_result.ToString();
         }
     }
 }
