@@ -9,27 +9,34 @@ class Program
 
         // Display map information
         Console.WriteLine($"Map Name: {map.Name}");
-        foreach (var chunk in map.Chunks)
+        foreach (Chunk chunk in map.Chunks)
         {
             Console.WriteLine($"Chunk at ({chunk.Coord.x}, {chunk.Coord.y})");
         }
 
         // Create a new male villager instance
-        for (var i = 0; i < 5; i++)
-        {
-            var villager = new Villager();
-            villager.gender = true;
-            villager.SetFirstName();
-            Console.WriteLine($"Male villager First Name: {villager.identity.FirstName}");
-        }
+        // for (var i = 0; i < 5; i++)
+        // {
+        //     var villager = new Villager();
+        //     villager.gender = true;
+        //     villager.SetFirstName();
+        //     Console.WriteLine($"Male villager First Name: {villager.identity.FirstName}");
+        // }
 
         // Create a new female villager instance
-        for (var i = 0; i < 5; i++)
+        // for (var i = 0; i < 5; i++)
+        // {
+        //     var villager = new Villager();
+        //     villager.gender = false;
+        //     villager.SetFirstName();
+        //     Console.WriteLine($"Female villager First Name: {villager.identity.FirstName}");
+        // }
+
+        // Create a new villager instance
+        for (int i = 0; i < 10; i++)
         {
             var villager = new Villager();
-            villager.gender = false;
-            villager.SetFirstName();
-            Console.WriteLine($"Female villager First Name: {villager.identity.FirstName}");
+            Console.WriteLine($"Villager ({villager.Gender}) First Name: {villager.Identity.FirstName}");
         }
 
     }
