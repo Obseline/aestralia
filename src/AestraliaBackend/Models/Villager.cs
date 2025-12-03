@@ -55,19 +55,17 @@ namespace AestraliaBackend.Models
         public List<Item> Items = [];
 
         // NOTE: winux Probably move to a builder pattern ?
-        public Villager()
+        public Villager() : this(new Random().NextDouble() >= 0.5) { }
+
+        public Villager(bool gender)
         {
             // FIXME: winux Set an atomic Id
-
-            var rng = new Random();
-            Gender = rng.NextDouble() >= 0.5;
+            Gender = gender;
             Identity.FirstName = new NameFactory().Generate(
          Gender
             ? ["John", "Paul", "Mike", "Kevin", "Steve", "David", "Robert", "James", "Daniel", "Mark", "Anthony", "Brian", "Thomas", "Jason", "Matthew", "Ryan", "Adam", "Eric", "Justin", "Andrew", "Luke", "Nathan"]
             : ["Mary", "Linda", "Susan", "Karen", "Lisa", "Patricia", "Jessica", "Jennifer", "Sarah", "Nancy", "Laura", "Emily", "Rebecca", "Michelle", "Melissa", "Angela", "Stephanie", "Kimberly", "Amanda", "Rachel", "Elizabeth"]
                     );
         }
-
-
     }
 }
