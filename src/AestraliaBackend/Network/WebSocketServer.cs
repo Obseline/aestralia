@@ -11,7 +11,7 @@ namespace AestraliaBackend.Network
     /// NOTE: winux It will quickly need a way to communicate with the "core"
     public class WebSocketServer
     {
-        static HttpListener _http_listener = new HttpListener();
+        static readonly HttpListener _http_listener = new();
 
         public WebSocketServer(string uri)
         {
@@ -24,7 +24,7 @@ namespace AestraliaBackend.Network
 
             while (true)
             {
-                var ctx = await _http_listener.GetContextAsync();
+                HttpListenerContext ctx = await _http_listener.GetContextAsync();
                 if (!ctx.Request.IsWebSocketRequest)
                 {
                     ctx.Response.StatusCode = 400;
@@ -32,34 +32,34 @@ namespace AestraliaBackend.Network
                     continue;
                 }
 
-                var wsCtx = await ctx.AcceptWebSocketAsync(null);
+                HttpListenerWebSocketContext wsCtx = await ctx.AcceptWebSocketAsync(null);
                 _ = Handle(wsCtx.WebSocket);
             }
         }
 
         static async Task Handle(WebSocket ws)
         {
-            var buf = new byte[1024];
+            byte[] buf = new byte[1024];
             try
             {
                 while (ws.State == WebSocketState.Open)
                 {
-                    var res = await ws.ReceiveAsync(new ArraySegment<byte>(buf), CancellationToken.None);
+                    WebSocketReceiveResult res = await ws.ReceiveAsync(new ArraySegment<byte>(buf), CancellationToken.None);
                     if (res.MessageType == WebSocketMessageType.Close)
                     {
                         await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Connection closed", CancellationToken.None);
                         break;
                     }
 
-                    var msg = Encoding.UTF8.GetString(buf, 0, res.Count);
+                    string msg = Encoding.UTF8.GetString(buf, 0, res.Count);
                     if (msg.Trim() == "ping")
                     {
-                        var response = Encoding.UTF8.GetBytes("pong");
+                        byte[] response = Encoding.UTF8.GetBytes("pong");
                         await ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, CancellationToken.None);
                     }
                     else
                     {
-                        var response = Encoding.UTF8.GetBytes("nop");
+                        byte[] response = Encoding.UTF8.GetBytes("nop");
                         await ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, CancellationToken.None);
                     }
                 }
