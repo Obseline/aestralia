@@ -6,8 +6,9 @@ namespace AestraliaBackend.Network
 {
 
     /// <summary>
-    /// Class <c>Village</c> models village on our <see>Map</see>.
+    /// Class <c>WebSocketServer</c> handle the clients' connections.
     /// </summary>
+    /// NOTE: winux It will quickly need a way to communicate with the "core"
     public class WebSocketServer
     {
         static HttpListener _http_listener = new HttpListener();
@@ -46,20 +47,26 @@ namespace AestraliaBackend.Network
                     var res = await ws.ReceiveAsync(new ArraySegment<byte>(buf), CancellationToken.None);
                     if (res.MessageType == WebSocketMessageType.Close)
                     {
-                        await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "bye", CancellationToken.None);
+                        await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Connection closed", CancellationToken.None);
                         break;
                     }
 
                     var msg = Encoding.UTF8.GetString(buf, 0, res.Count);
-                    Console.WriteLine("Received: " + msg);
-                    var outBytes = Encoding.UTF8.GetBytes(msg);
-                    await ws.SendAsync(new ArraySegment<byte>(outBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+                    if (msg.Trim() == "ping")
+                    {
+                        var response = Encoding.UTF8.GetBytes("pong");
+                        await ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                    else
+                    {
+                        var response = Encoding.UTF8.GetBytes("nop");
+                        await ws.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error: " + e.Message);
-                try { await ws.CloseAsync(WebSocketCloseStatus.InternalServerError, "err", CancellationToken.None); } catch { }
+                try { await ws.CloseAsync(WebSocketCloseStatus.InternalServerError, e.ToString(), CancellationToken.None); } catch { }
             }
         }
     }
