@@ -1,0 +1,69 @@
+name: Build & Push docker Images
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-backend:
+    name: Build & Push Backend
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Pack CLI
+      uses: buildpacks/github-actions/setup-pack@v5.0.0
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build Backend with Buildpacks
+      run: |
+        pack build ${{ secrets.DOCKERHUB_USERNAME }}/aestralia-backend:latest \
+          --builder paketobuildpacks/builder-jammy-base \
+          --env BP_DOTNET_PROJECT_PATH=src/AestraliaBackend/AestraliaBackend.csproj \
+          --env BP_DOTNET_FRAMEWORK_VERSION=9.0 \
+          --publish
+
+    - name: Tag Backend SHA
+      run: |
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/aestralia-backend:latest \
+          ${{ secrets.DOCKERHUB_USERNAME }}/aestralia-backend:${{ github.sha }}
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/aestralia-backend:${{ github.sha }}
+
+  build-frontend:
+    name: Build & Push Frontend
+    runs-on: ubuntu-latest
+    needs: build-backend
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Pack CLI
+      uses: buildpacks/github-actions/setup-pack@v5.0.0
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build Frontend with Buildpacks
+      run: |
+        pack build ${{ secrets.DOCKERHUB_USERNAME }}/aestralia-frontend:latest \
+          --builder paketobuildpacks/builder-jammy-base \
+          --env BP_DOTNET_PROJECT_PATH=src/AestraliaFrontend/AestraliaFrontend.csproj \
+          --env BP_DOTNET_FRAMEWORK_VERSION=9.0 \
+          --publish
+
+    - name: Tag Frontend SHA
+      run: |
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/aestralia-frontend:latest \
+          ${{ secrets.DOCKERHUB_USERNAME }}/aestralia-frontend:${{ github.sha }}
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/aestralia-frontend:${{ github.sha }}
