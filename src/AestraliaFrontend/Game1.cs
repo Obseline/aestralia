@@ -1,82 +1,61 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using AestraliaFrontend.Screens;
-using AestraliaFrontend.Networking;
+﻿﻿using AestraliaFrontend.Scenes;
+using Gum.Forms;
+using Gum.Forms.Controls;
+using MonoGameLibrary;
+using MonoGameGum;
 
-namespace AestraliaFrontend {
-    public class Game1 : Game
+namespace AestraliaFrontend;
+public class Game1 : Core
+{   
+    public Game1() : base ("Aestralia", 1280, 720, false)
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        private GameScreen _currentScreen;
+        
+    }
 
-        public SpriteFont DefaultFont { get; private set; }
-        public NetworkClient Network { get; private set; }
+    private void InitializeGum()
+    {
+        // Initialize the Gum service. The second parameter specifies
+        // the version of the default visuals to use. V2 is the latest
+        // version.
+        GumService.Default.Initialize(this, DefaultVisualsVersion.V2);
 
-        public Game1()
-        {
-            _graphics = new GraphicsDeviceManager(this)
-            {
-                IsFullScreen = false,
-                HardwareModeSwitch = false
-            };
+        // Tell the Gum service which content manager to use.  We will tell it to
+        // use the global content manager from our Core.
+        GumService.Default.ContentLoader.XnaContentManager = Core.Content;
 
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-        }
+        // Register keyboard input for UI control.
+        FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
 
-        protected override void Initialize()
-        {
-            Window.Title = "Aestralia";
+        // Register gamepad input for Ui control.
+        FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
 
-            var displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
-            _graphics.PreferredBackBufferWidth = displayMode.Width;
-            _graphics.PreferredBackBufferHeight = displayMode.Height;
-            _graphics.ApplyChanges();
+        // Customize the tab reverse UI navigation to also trigger when the keyboard
+        // Up arrow key is pushed.
+        FrameworkElement.TabReverseKeyCombos.Add(
+        new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Up });
 
-            Window.Position = Point.Zero;
-            Window.IsBorderless = true;
+        // Customize the tab UI navigation to also trigger when the keyboard
+        // Down arrow key is pushed.
+        FrameworkElement.TabKeyCombos.Add(
+        new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Down });
 
-            Network = new NetworkClient("ws://localhost:34000");
+        // The assets created for the UI were done so at 1/4th the size to keep the size of the
+        // texture atlas small.  So we will set the default canvas size to be 1/4th the size of
+        // the game's resolution then tell gum to zoom in by a factor of 4.
+        GumService.Default.CanvasWidth = GraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
+        GumService.Default.CanvasHeight = GraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
+        GumService.Default.Renderer.Camera.Zoom = 4.0f;
+    }
 
-            Network.OnMessageReceived += msg =>
-            {
-                Console.WriteLine("Message reçu du serveur: " + msg);
-            };
+    protected override void Initialize()
+    {
+        base.Initialize();
+        InitializeGum();
+        ChangeScene(new TitleScene());
+    }
 
-            base.Initialize();
-        }
-
-        protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            DefaultFont = Content.Load<SpriteFont>("Fonts/DefaultFont");
-
-            SetScreen(new MainMenuScreen(this));
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            _currentScreen?.Update(gameTime);
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _currentScreen?.Draw(gameTime, _spriteBatch);
-
-            base.Draw(gameTime);
-        }
-
-        public void SetScreen(GameScreen screen)
-        {
-            _currentScreen = screen;
-            _currentScreen.LoadContent();
-        }
+    protected override void LoadContent()
+    {
+        
     }
 }

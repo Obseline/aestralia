@@ -8,16 +8,15 @@ namespace AestraliaFrontend.Networking
 {
     public class NetworkClient
     {
-        private readonly ClientWebSocket _ws = new ClientWebSocket();
+        private ClientWebSocket _ws = new ClientWebSocket();
+        private readonly SemaphoreSlim _wsLock = new SemaphoreSlim(1, 1);
         private readonly Uri _uri;
 
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
         /// <summary>
         /// Gets all received messages from the server
-        /// Example of usage:
-        /// - In Game1 class : Network.OnMessageReceived += msg => { Whatever you want };
-        /// - In Other classes : Game.Network.OnMessageReceived += msg => { Whatever you want };
+        /// Example of usage: Core.Network.OnMessageReceived += msg => { Whatever you want };
         /// </summary>
         public event Action<string> OnMessageReceived;
 
@@ -37,19 +36,38 @@ namespace AestraliaFrontend.Networking
 
         /// <summary>
         /// Sends a message to the server
-        /// Example of usage:
-        /// - In Game1 class: await Network.SendMessageAsync("ping");
-        /// - In other classes: await Game.Network.SendMessageAsync("ping");
+        /// Example of usage: await Core.Network.SendMessageAsync("ping");
         /// </summary>
         public async Task SendMessageAsync(string message)
         {
-            try {
-                if (_ws.State != WebSocketState.Open)
-                await ConnectAsync();
-                byte[] buffer = Encoding.UTF8.GetBytes(message);
-                await _ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
-            } catch (Exception ex) {
+            try
+            {
+                await _wsLock.WaitAsync();
+
+                if (_ws == null || _ws.State == WebSocketState.Closed || _ws.State == WebSocketState.Aborted)
+                {
+                    _ws?.Dispose();
+                    _ws = new ClientWebSocket();
+                }
+
+                if (_ws.State != WebSocketState.Open && _ws.State != WebSocketState.Connecting)
+                {
+                    await ConnectAsync();
+                }
+
+                if (_ws.State == WebSocketState.Open)
+                {
+                    byte[] buffer = Encoding.UTF8.GetBytes(message);
+                    await _ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine("Websocket sending error: " + ex.Message);
+            }
+            finally
+            {
+                _wsLock.Release();
             }
         }
 
