@@ -1,4 +1,4 @@
-namespace AestraliaBackend.Models
+namespace AestraliaBackend.Models.Structs
 {
     /// <summary>
     /// Struct <c>Coord</c> models coordinates
@@ -21,9 +21,9 @@ namespace AestraliaBackend.Models
 
         // IEquatable
         // https://learn.microsoft.com/en-us/dotnet/api/system.iequatable-1?view=net-9.0
-        public bool Equals(Coord other) => x == other.x && y == other.y;
+        public readonly bool Equals(Coord other) => x == other.x && y == other.y;
         public override bool Equals(object? obj) => obj is Coord c && Equals(c);
-        public override int GetHashCode() => HashCode.Combine(x, y);
+        public override readonly int GetHashCode() => HashCode.Combine(x, y);
         public static bool operator ==(Coord left, Coord right) => left.Equals(right);
         public static bool operator !=(Coord left, Coord right) => !left.Equals(right);
     }

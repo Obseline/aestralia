@@ -1,4 +1,4 @@
-namespace AestraliaBackend.Models
+namespace AestraliaBackend.Models.Structs
 {
     /// <summary>
     /// Struct <c>Need</c> models the needs of a <see>Villager</see>.
