@@ -1,3 +1,4 @@
+using AestraliaBackend.Models.Structs;
 using AestraliaBackend.Interfaces;
 
 namespace AestraliaBackend.Models
