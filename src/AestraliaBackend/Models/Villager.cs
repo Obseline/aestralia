@@ -47,5 +47,10 @@ namespace AestraliaBackend.Models
                 new Action("sleep"),
                 new Action("reproduce"),
         ];
+
+        /// <summary>
+        /// <see>Item</see>s held by this <c>Villager</c>.
+        /// </summary>
+        public List<Item> Items = [];
     }
 }

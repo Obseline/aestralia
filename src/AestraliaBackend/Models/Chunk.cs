@@ -2,6 +2,9 @@ using AestraliaBackend.Models.Structs;
 
 namespace AestraliaBackend.Models
 {
+    /// <summary>
+    /// All the possible variants for a <c>Biome</c>.
+    /// </summary>
     public enum LandKind
     {
         None = 0,
@@ -19,13 +22,13 @@ namespace AestraliaBackend.Models
         /// <summary>
         /// Location of the <c>Chunk</c> on the <see>Map</see>.
         /// </summary>
-        public required Coord Coord = coord;
+        public Coord Coord = coord;
 
         public LandKind LandKind = LandKind.None;
 
         /// <summary>
-        /// <see>Ressource</see>s available on this <c>Chunk</c>.
+        /// <see>Item</see>s available on this <c>Chunk</c>.
         /// </summary>
-        public Item[] Items = [];
+        public List<Item> Items = [];
     }
 }
