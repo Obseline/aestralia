@@ -5,7 +5,7 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  build:
+  build-frontend:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/dotnet/sdk:9.0.308
@@ -13,39 +13,64 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
-      - name: Restore packages
-        run: dotnet restore
-      
-      - name: Build Backend
-        run: dotnet build src/AestraliaBackend/AestraliaBackend.csproj --configuration Release --no-restore
-      
+
+      - name: Restore Frontend
+        run: dotnet restore src/AestraliaFrontend/AestraliaFrontend.csproj
+
       - name: Build Frontend
         run: dotnet build src/AestraliaFrontend/AestraliaFrontend.csproj --configuration Release --no-restore
-      
-      - name: Upload artifacts
+
+      - name: Upload Frontend Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-output
-          path: |
-            **/bin/Release/
-            !**/obj/
-  
-  test:
+          name: frontend-build
+          path: src/AestraliaFrontend/bin/Release
+
+  build-backend:
     runs-on: ubuntu-latest
-    needs: build
     container:
       image: mcr.microsoft.com/dotnet/sdk:9.0.308
-    
+
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
-      
-      - name: Download build artifacts
+
+      - name: Restore Backend
+        run: dotnet restore src/AestraliaBackend/AestraliaBackend.csproj
+
+      - name: Build Backend
+        run: dotnet build src/AestraliaBackend/AestraliaBackend.csproj --configuration Release --no-restore
+
+      - name: Upload Backend Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build
+          path: src/AestraliaBackend/bin/Release
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [build-frontend, build-backend]
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:9.0.308
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Frontend Artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-output
-          path: ./build/
+          name: frontend-build
+          path: ./build/frontend
 
-      - name: Run tests
-        run: dotnet test --configuration Release --verbosity normal
+      - name: Download Backend Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-build
+          path: ./build/backend
+
+      - name: Run Frontend Tests
+        run: dotnet test src/AestraliaFrontend/AestraliaFrontend.csproj --configuration Release --verbosity normal
+
+      - name: Run Backend Tests
+        run: dotnet test src/toto/toto.csproj --configuration Release --verbosity normal
