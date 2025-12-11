@@ -73,4 +73,4 @@ jobs:
         run: dotnet test src/AestraliaFrontend/AestraliaFrontend.csproj --configuration Release --verbosity normal
 
       - name: Run Backend Tests
-        run: dotnet test src/toto/toto.csproj --configuration Release --verbosity normal
+        run: dotnet test src/AestraliaBackend/AestraliaBackend.csproj --configuration Release --verbosity normal
