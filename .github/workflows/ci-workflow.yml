@@ -17,8 +17,11 @@ jobs:
       - name: Restore packages
         run: dotnet restore
       
-      - name: Build App
-        run: dotnet build --configuration Release --no-restore
+      - name: Build Backend
+        run: dotnet build src/AestraliaBackend/AestraliaBackend.csproj --configuration Release --no-restore
+      
+      - name: Build Frontend
+        run: dotnet build src/AestraliaFrontend/AestraliaFrontend.csproj --configuration Release --no-restore
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
