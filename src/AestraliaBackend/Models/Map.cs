@@ -55,6 +55,22 @@ namespace AestraliaBackend.Models
                     .SelectMany(inner => inner)
                     .Select(t => new Coord { x = t.w, y = t.h })
                     .Select(coord => new Chunk(coord))];
+
+            // Should it be done here ?
+            const int BIOMES_COUNT = 20;
+            var rnd = new Random();
+            var biome_centers = Enumerable.Range(0, BIOMES_COUNT)
+                .Select(i => rnd.Next() % (Width * Height))
+                .Select(i => (Chunks[i].Coord, (LandKind)(i % Enum.GetValues(typeof(LandKind)).Length)))
+            .ToList();
+            foreach (var chunk in Chunks)
+            {
+                var closest = biome_centers.MinBy(biome =>
+                        Math.Pow(biome.Item1.x - chunk.Coord.x, 2)
+                        + Math.Pow(biome.Item1.y - chunk.Coord.y, 2)
+                    );
+                chunk.LandKind = closest.Item2;
+            }
         }
 
         /// <summary>
