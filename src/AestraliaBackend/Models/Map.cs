@@ -30,7 +30,7 @@ namespace AestraliaBackend.Models
         /// <summary>
         /// All the <see>Biome</see>s on the Map.
         /// </summary>
-        public Biome[] Biomes = [];
+        public List<Biome> Biomes = [];
 
         /// <summary>
         /// All the <see>Village</see>s on the Map.
