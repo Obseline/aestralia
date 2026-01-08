@@ -1,5 +1,4 @@
 using System.Text;
-using System;
 
 using AestraliaBackend.Models.Structs;
 using AestraliaBackend.Interfaces;
@@ -164,14 +163,14 @@ namespace AestraliaBackend.Models
 
             StringBuilder sb_pixels = new();
             sb_pixels.AppendLine("P3");
-            sb_pixels.AppendLine($"{Width} {Height}");
+            sb_pixels.AppendLine($"{Width * RESOLUTION} {Height * RESOLUTION}");
             sb_pixels.AppendLine("15");
             for (int outer_h = 0; outer_h < Chunks.Length / Width; ++outer_h)
             {
-                for (int outer_w = 0; outer_w < Width; ++outer_w)
+                for (int inner_h = 0; inner_h < RESOLUTION; ++inner_h)
                 {
                     // Console.WriteLine($"{outer_h}:{outer_w} ({Chunks[outer_h * Width + outer_w].Coord.x})");
-                    for (int inner_h = 0; inner_h < RESOLUTION; ++inner_h)
+                    for (int outer_w = 0; outer_w < Width; ++outer_w)
                     {
                         for (int inner_w = 0; inner_w < RESOLUTION; ++inner_w)
                         {
