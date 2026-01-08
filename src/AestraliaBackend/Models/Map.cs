@@ -1,3 +1,6 @@
+using System.Text;
+using System;
+
 using AestraliaBackend.Models.Structs;
 using AestraliaBackend.Interfaces;
 
@@ -6,12 +9,15 @@ namespace AestraliaBackend.Models
     /// <summary>
     /// Class <c>Map</c> models the world.
     /// </summary>
-    public class Map : IDisplayable
+    public class Map : IDisplayable, IPpm
     {
         /// <summary>
         /// Name of the map/world.
         /// </summary>
         public string Name;
+
+        public int Width { get; }
+        public int Height { get; }
 
         /// <summary>
         /// Models the "cells" of the map.
@@ -42,6 +48,8 @@ namespace AestraliaBackend.Models
         /// </summary>
         public Map(string name, int width, int height)
         {
+            Width = width;
+            Height = height;
             Name = name;
             Chunks = [.. Enumerable.Range(0, height)
                     .Select(h => Enumerable.Range(0, width).Select(w => (w, h)))
@@ -59,6 +67,12 @@ namespace AestraliaBackend.Models
         {
             Display("C");
         }
+
+        public void SpawnVillages(int num_villages)
+        {
+            Console.WriteLine($"TODO: Spawn {num_villages} villages");
+        }
+
 
         /// <summary>
         /// Display the the `Map` in the Console.
@@ -108,6 +122,72 @@ namespace AestraliaBackend.Models
                 Console.BackgroundColor = initial_background;
             }
 
+        }
+
+        private const UInt16 RED = 0x0F00;
+        private const UInt16 GREEN = 0x00F0;
+        private const UInt16 BLUE = 0x000F;
+        private const UInt16 YELLOW = 0x0FF0;
+        private const UInt16 WHITE = 0x0FFF;
+        private const UInt16 GRAY = 0x0777;
+        private const UInt16 BLACK = 0x0000;
+
+        private static UInt16[,] vec2(UInt16 color)
+        {
+            var p = new UInt16[5, 5];
+            for (int i = 0; i < 5; ++i)
+            {
+                for (int j = 0; j < 5; ++j)
+                {
+                    p[i, j] = color;
+                }
+            }
+            return p;
+        }
+
+        /// <summary>
+        /// Serialize the `Map` to a `.ppm` image.
+        /// </summary>
+        public void ToPpm(string filename)
+        {
+            const int RESOLUTION = 5;
+            UInt16[][,] pixels = [.. Chunks.Select(
+                    chunk => chunk.LandKind switch
+                        {
+                            LandKind.Ocean => vec2(BLUE),
+                            LandKind.Forest => vec2(GREEN),
+                            LandKind.Desert => vec2(YELLOW),
+                            LandKind.Mountain => vec2(GRAY),
+                            LandKind.None => vec2(RED),
+                        }
+                    )];
+
+            StringBuilder sb_pixels = new();
+            sb_pixels.AppendLine("P3");
+            sb_pixels.AppendLine($"{Width} {Height}");
+            sb_pixels.AppendLine("15");
+            for (int outer_h = 0; outer_h < Chunks.Length / Width; ++outer_h)
+            {
+                for (int outer_w = 0; outer_w < Width; ++outer_w)
+                {
+                    // Console.WriteLine($"{outer_h}:{outer_w} ({Chunks[outer_h * Width + outer_w].Coord.x})");
+                    for (int inner_h = 0; inner_h < RESOLUTION; ++inner_h)
+                    {
+                        for (int inner_w = 0; inner_w < RESOLUTION; ++inner_w)
+                        {
+                            sb_pixels.Append((pixels[outer_h * Width + outer_w][inner_w, inner_h] & 0x0F00) >> 8);
+                            sb_pixels.Append(" ");
+                            sb_pixels.Append((pixels[outer_h * Width + outer_w][inner_w, inner_h] & 0x00F0) >> 4);
+                            sb_pixels.Append(" ");
+                            sb_pixels.Append((pixels[outer_h * Width + outer_w][inner_w, inner_h] & 0x000F));
+                            sb_pixels.Append("  ");
+                        }
+                        sb_pixels.AppendLine("");
+                    }
+                    sb_pixels.AppendLine("");
+                }
+            }
+            File.WriteAllText(filename + ".ppm", sb_pixels.ToString());
         }
     }
 }
