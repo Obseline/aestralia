@@ -61,7 +61,7 @@ namespace AestraliaBackend.Models
             var rnd = new Random();
             var biome_centers = Enumerable.Range(0, BIOMES_COUNT)
                 .Select(i => rnd.Next() % (Width * Height))
-                .Select(i => (Chunks[i].Coord, (LandKind)(i % Enum.GetValues(typeof(LandKind)).Length)))
+                .Select(i => (Chunks[i].Coord, (LandKind)(i % (Enum.GetValues(typeof(LandKind)).Length - 1) + 1)))
             .ToList();
             foreach (var chunk in Chunks)
             {
